@@ -10,7 +10,7 @@ def item_list(request):
     :return: render item-list
     '''
     context = {
-        'items' : Item.objects.all()
+        'items': Item.objects.all()
     }
 
     return render(request, 'core/item_list.html', context)
