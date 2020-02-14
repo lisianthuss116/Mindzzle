@@ -3,10 +3,10 @@ import os
 import sys
 
 if __name__ == '__main__':
-    try :
+    try:
         import environ
         os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Ecommerce.settings')
-    except Importeror :
+    except Importeror:
         raise ImportError(
             "Are you sure environ has been installed or are you forgot to "
             "activate your virtual environment ?"
