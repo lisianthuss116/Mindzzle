@@ -5,7 +5,9 @@ import sys
 if __name__ == '__main__':
     try:
         import environ
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Ecommerce.settings')
+        env = environ.Env(DEBUG = (bool, False))
+        environ.Env.read_env('./.env')
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE',env('DJANGO_SETTINGS_MODULE'))
     except Importeror:
         raise ImportError(
             "Are you sure environ has been installed or are you forgot to "
