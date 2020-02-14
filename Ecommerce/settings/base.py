@@ -6,7 +6,7 @@ import dj_database_url
 env = environ.Env(DEBUG=(bool, False))
 environ.Env.read_env('./.env')
 
-DEBUG = False
+DEBUG = True
 sys.path.append('./backend/')
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # installed app
     'core',
+    'users',
     # third party
     'rest_framework',
 ]
@@ -86,4 +87,8 @@ USE_L10N = True
 
 USE_TZ = True
 
-STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static') 
+STATIC_URL  = '/static/'
+
+MEDIA_URL  = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
