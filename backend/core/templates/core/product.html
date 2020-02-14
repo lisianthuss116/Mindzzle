@@ -2,12 +2,47 @@
 
 {% block content %}
 <div class="container mt-5 mb-5">
-    <h2>List of items</h2>
-    <div class="row mt-5">
-        <div class="card border-radius-015 mt-3 mr-5">
+    <h2 class="mb-5">List of items</h2>
+    <div class="row">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{message.tags}}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="row">
+        <div class="card border-radius-015 mt-3 mr-5" style="width:21rem;">
             <div class="card-body">
                 <p class="card-text">
-                    {{object.title}}<span class="small badge p-2">&nbsp;&nbsp;&nbsp;-{{ object.slug }}</span>
+                    <div class="row">
+                        <div class="col-lg-5 col-sm-12">
+                            <p>{{object.title}}</p>
+                            <p class="small">{{ object.get_category_display }}</p>
+                        </div>
+                        <div class="col-lg-7 col-sm-12">
+                            <strong>
+                                {% if object.discount_price %}
+                                <p>
+                                    <del>${{ object.price }}</del>
+                                    &nbsp;&nbsp;
+                                    <span>${{ object.discount_price }}</span>
+                                </p>
+                                {% else %}
+                                <p>${{ object.price }}</p>
+                                {% endif %}
+                            </strong>
+                            <br>
+                            <p>
+                                {{ object.description_item }}
+                            </p>
+                        </div>
+                    </div>
+                </p>
+                <p class="card-text border-top mt-5">
+                    <a href="{{ object.get_add_to_cart_url }}">Add to cart</a>
+                    <a href="{{ object.get_remove_from_cart_url }}" class="text-danger">Remove from cart</a>
                 </p>
             </div>
         </div>
