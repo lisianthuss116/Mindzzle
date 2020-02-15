@@ -6,41 +6,41 @@ from django.utils import timezone
 
 
 class Home(ListView):
-    '''
-    showing all item list
+    """
+    showing all products
 
-    :return: render item-list
-    '''
+    :return render all products
+    """
     model = Item
     template_name = 'core/home-page.html'
 
 
 class ProductDetail(DetailView):
-    '''
+    """
     showing specific product item
 
-    :return: all products
-    '''
+    :return all products
+    """
     model = Item
     template_name = 'core/product.html'
 
 
 def checkout(request):
-    '''
+    """
     checkout
 
-    :param request
-    '''
+    :param request:
+    """
     return render(request, 'core/checkout.html', context)
 
 
 def add_to_cart(request, slug):
-    '''
+    """
     add to cart
 
-    :param request
-    :param slug
-    '''
+    :param request:
+    :param slug:
+    """
     # get item, otherwise give 404 not found
     item = get_object_or_404(Item, slug=slug)
     # order the item
@@ -56,6 +56,7 @@ def add_to_cart(request, slug):
             order_item.save()
             messages.info(request, 'This item quantity was update')
             return redirect('core:product', slug=slug)
+        # otherwise add into cart
         else:
             order.items.add(order_item)
             messages.info(request, 'This item was added to your cart')
@@ -72,12 +73,12 @@ def add_to_cart(request, slug):
 
 
 def remove_from_cart(request, slug):
-    '''
+    """
     remove an item from cart
 
-    :param request
-    :param slug
-    '''
+    :param request:
+    :param slug:
+    """
     # get item, otherwise give 404
     item = get_object_or_404(Item, slug=slug)
     # check if user had an order
@@ -91,13 +92,13 @@ def remove_from_cart(request, slug):
             order_item = OrderItem.objects.filter(
                 item=item, user=request.user, ordered=False)[0]
             order.items.remove(order_item)
-            messages.info(request, 'This item was removed from your cart')
+            messages.warning(request, 'This item was removed from your cart')
             return redirect('core:product', slug=slug)
-        else :
+        else:
             # return message [user doesn't contain the order item]
-            messages.info(request, 'This item was not in your cart')
+            messages.warning(request, 'This item was not in your cart')
             return redirect('core:product', slug=slug)
     else:
         # return message [user doesn't have an order]
-        messages.info(request, "You doesn't order this item")
+        messages.warning(request, "You doesn't order this item")
         return redirect('core:product', slug=slug)
