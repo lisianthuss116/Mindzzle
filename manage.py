@@ -9,7 +9,6 @@ if __name__ == '__main__':
         environ.Env.read_env('./.env')
         os.environ.setdefault('DJANGO_SETTINGS_MODULE',
                               env('DJANGO_SETTINGS_MODULE'))
-
     except ImportError:
         raise ImportError(
             "Are you sure environ has been installed or are you forgot to "

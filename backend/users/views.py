@@ -7,5 +7,4 @@ def profile(request) :
     context = {
         'users': Profile.objects.all()
     }
-
     return render(request, 'users/index.html', context)
