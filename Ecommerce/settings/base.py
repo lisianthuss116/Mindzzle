@@ -6,7 +6,7 @@ import dj_database_url
 env = environ.Env(DEBUG=(bool, False))
 environ.Env.read_env('./.env')
 
-DEBUG = False
+DEBUG = True
 sys.path.append('./backend/')
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -90,10 +90,17 @@ USE_L10N = True
 
 USE_TZ = True
 
+
+MEDIA_URL  = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
+
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+<<<<<<< HEAD
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+=======
+>>>>>>> 47076b65bfe018ef50841fb4b533cc65253c7269

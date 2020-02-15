@@ -4,11 +4,6 @@ import environ
 env = environ.Env(DEBUG=(bool, True))
 environ.Env.read_env('./.env')
 
-DEBUG = True
-
-ALLOWED_HOSTS = [
-    '127.0.0.1', 'localhost',
-]
 
 DATABASES = {}
 DATABASE_URL = env('DB_URL')
