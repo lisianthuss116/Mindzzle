@@ -3,14 +3,21 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from account.views import register
+from django.contrib.auth import views as auth_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # core
     path('', include('core.urls', namespace='core')),
+
+    # AUTH
     # register
     path('register/', register, name='register'),
+    # login
+    path('login/', auth_view.LoginView.as_view(
+        template_name='auth/login.html'), name='login'),
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
