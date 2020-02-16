@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from account.forms import UserRegistrationForm
+from django.views.decorators.http import require_http_methods
 
 
+@require_http_methods(['GET','POST'])
 def register(request):
     """
     user register new account
@@ -17,7 +19,7 @@ def register(request):
         # validate form
         if form.is_valid():
             form.save()
-            # if data does not validate return only username field
+            # if data does not valid, return only username field
             username = form.cleaned_data.get('username')
             # message [success]
             messages.success(request, 'Your account has been created!')
