@@ -1,3 +1,5 @@
+{% load cart_template_tags %}
+
 <nav class="navbar navbar-expand-lg navbar-light bg-dark-grey">
     <h3 class="p-2"><a class="text-white" href="/">Django E-commerce</a></h3>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -15,19 +17,27 @@
         </ul>
         <ul class="navbar-nav ml-auto">
             {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link text-white small mr-3" href="#">Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white small" href="{% url 'logout' %}">Logout</a>
-                </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link text-white small" href="{% url 'login' %}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white small" href="{% url 'register' %}">Register</a>
-                    </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'core:order-summary' %}">
+                    <span class="mr-2">cart</span>
+                    <span class="badge badge-light small">
+                        {{ request.user|cart_item_count }}
+                    </span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white mr-3" href="#">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'login' %}">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'register' %}">Register</a>
+            </li>
             {% endif %}
         </ul>
     </div>
