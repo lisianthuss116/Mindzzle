@@ -22,8 +22,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # installed app
+    'account',
     'core.apps.CoreConfig',
-    'account.apps.AccountConfig',
     # third party
     'rest_framework',
     'crispy_forms',
@@ -97,7 +97,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
-
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = 'login'
