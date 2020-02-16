@@ -66,19 +66,16 @@ def remove_from_cart(request, slug):
         order = order_querySet[0]
         # check if the order item is in the order | slug
         if order.items.filter(item__slug=item.slug).exists():
+            # delete the order item
             order_item = OrderItem.objects.filter(
                 item=item, username_order_item=request.user, ordered=False)[0]
-            order.items.remove(order_item)
+            order_item.delete()
+            # delete the order
+            Order.objects.filter(username_order=request.user).delete()
             messages.warning(request, 'This item was removed from your cart')
-            return redirect('core:product', slug=slug)
-        else:
-            # return message [user doesn't contain the order item]
-            messages.warning(request, 'This item was not in your cart')
-            return redirect('core:product', slug=slug)
-    else:
-        # return message [user doesn't have an order]
-        messages.warning(request, "You doesn't order this item")
-        return redirect('core:product', slug=slug)
+            return redirect('core:order-summary')
+
+    return False
 
 
 @login_required
@@ -98,13 +95,24 @@ def decrease_quantity(request, slug):
     if order_querySet.exists():
         # get|grab the order
         order = order_querySet[0]
-        # check if the order item is in the order | slug
+        # check if the order item is in the order
         if order.items.filter(item__slug=item.slug).exists():
             order_item = OrderItem.objects.filter(
                 item=item, username_order_item=request.user, ordered=False)[0]
-            order_item.quantity -= 1
-            order_item.save()
-            messages.warning(request, 'This item quantity was updated')
+            # delete the order items
+            if order_item.quantity <= 1 or order_item.quantity < 0:
+                order_item.delete()
+                # delete the order
+                Order.objects.filter(
+                    username_order=request.user, items=item).delete()
+                messages.warning(
+                    request, 'This item was removed from your cart')
+            # decrease the quantity of items in the cart
+            else:
+                order_item.quantity -= 1
+                order_item.save()
+                messages.warning(request, 'This item quantity was updated')
+
             return redirect('core:order-summary')
 
     return False
@@ -132,7 +140,7 @@ def increase_quantity(request, slug):
         if order.items.filter(item__slug=item.slug).exists():
             order_item.quantity += 1
             order_item.save()
-            messages.info(request, 'This item quantity was update')
+            messages.info(request, 'This item quantity was updated')
             return redirect('core:order-summary')
         # otherwise add into cart
         else:
