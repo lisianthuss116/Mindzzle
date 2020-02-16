@@ -11,7 +11,7 @@ then receive by the decorator @receiver => excecute 'create_profile'
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
     """
-    after an objects have been save => [post_save] | the user
+    after an objects have been save => [post_save] | the user.
     auto create user-profile after user register
 
     :param sender:
@@ -19,13 +19,13 @@ def create_profile(sender, instance, created, **kwargs):
     :param created:
     """
     # create user profile
-    Profile.objects.create(user=instance)
+    Profile.objects.create(user_account_name=instance)
 
 
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, **kwargs):
     """
-    save user-profile
+    save created user-profile
 
     :param sender:
     :param instance => User:
