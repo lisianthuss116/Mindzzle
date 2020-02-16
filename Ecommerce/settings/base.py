@@ -22,7 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # installed app
-    'account',
+    'account.apps.AccountConfig',
     'core.apps.CoreConfig',
     # third party
     'rest_framework',
