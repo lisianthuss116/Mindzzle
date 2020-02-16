@@ -1,0 +1,43 @@
+{% for product in ordered_products.items.all %}
+<div class="card border-radius-015 mt-3 mr-5" style="width:50rem;">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-3 col-sm-12">
+                <p>Shit image</p>
+            </div>
+            <div class="col-lg-9 col-sm-12">
+                <p>
+                    <a href="{{ product.item.get_absolute_url }}" class="a-no-decoration font-weight-bold">
+                        {{ product.item.title }}
+                    </a>
+                </p>
+                <span>
+                    {% if product.item.discount_price %}
+                    <p>
+                        <del class="text-secondary ">${{ product.item.price }}</del>
+                        &nbsp;&nbsp;
+                        <span style="color:#FA591D;" class="font-weight-bold">${{ product.item.discount_price }}</span>
+                    </p>
+                    {% else %}
+                    <p>${{ product.item.price }}</p>
+                    {% endif %}
+                </span>
+                <span class="mt-5">
+                    <span class="mr-2">Quantity :</span>
+                    <a href="{% url 'core:decrease-quantity' product.item.slug %}">-</a>&nbsp;
+                    {{ product.quantity }}
+                    &nbsp;<a href="{% url 'core:increase-quantity' product.item.slug %}">+</a>
+                </span>
+                <p>Total item price :&nbsp;
+                    {% if product.item.discount_price %}
+                    <span style="color:#FA591D;"
+                        class="font-weight-bold">${{ product.get_total_discount_item_price }}</span>
+                    {% else %}
+                    <span style="color:#FA591D;" class="font-weight-bold">${{ product.get_total_item_price }}</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
