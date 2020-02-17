@@ -1,4 +1,6 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-dark-grey">
+{% load cart_template_tags %}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark-grey">
     <h3 class="p-2"><a class="text-white" href="/">Django E-commerce</a></h3>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -14,15 +16,29 @@
             </li>
         </ul>
         <ul class="navbar-nav ml-auto">
+            {% if user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link text-white small" href="#">Login</a>
+                <a class="nav-link text-white" href="{% url 'core:order-summary' %}">
+                    <span class="mr-2">cart</span>
+                    <span class="badge badge-light small">
+                        {{ request.user|cart_item_count }}
+                    </span>
+                </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white small" href="{% url 'register' %}">Register</a>
+                <a class="nav-link text-white mr-3" href="{% url 'profile'%}">Profile</a> 
             </li>
-            <!-- <li class="nav-item">
-                <a class="nav-link text-white" href="#">Logout</a>
-            </li> -->
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'login' %}">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'register' %}">Register</a>
+            </li>
+            {% endif %}
         </ul>
     </div>
 </nav>

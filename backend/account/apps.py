@@ -10,4 +10,4 @@ class AccountConfig(AppConfig):
 
         :param self:
         """
-        import account.signals
+        import account.automation
