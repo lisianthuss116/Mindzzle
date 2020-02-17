@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.shortcuts import reverse
 from django.template.defaultfilters import slugify
+from unidecode import unidecode
 
 CATEGORY_CHOICES = (
     ('S', 'Shirt'),
@@ -23,13 +24,16 @@ class Item(models.Model):
     discount_price = models.FloatField(blank=True, null=True)
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=2)
     label = models.CharField(choices=LABEL_CHOICES, max_length=1)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(blank=True, null=True)
 
     def __str__(self):
         return self.title
 
-    def slug(self):
-        return slugify(self.title)
+    def save(self, *args, **kwargs):
+        if not self.id:
+            # Newly created object, so set slug
+            self.slug = slugify(unidecode(self.title))
+        super(Item, self).save(*args, **kwargs)
 
     def get_add_to_cart_url(self):
         return reverse("core:add-to-cart", kwargs={"slug": self.slug})
