@@ -23,6 +23,7 @@
                 <div class="card-body">
                     <h5>Cart</h5>
                     <hr>
+                    {% if ordered_products %}
                     <div class="card-body">
                         <div class="row">
                             <p>Total price :</p>
@@ -31,6 +32,7 @@
                             </span>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
                 <div class="card-body">
                     {% if not ordered_products %}
