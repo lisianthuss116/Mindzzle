@@ -13,7 +13,7 @@ app_name = 'core'
 
 urlpatterns = [
     # home
-    path('', cache_page(60*60)(Home.as_view()), name='home'),
+    path('', Home.as_view(), name='home'),
     # user cart
     path('order-summary/', OrderSummary.as_view(), name='order-summary'),
     # detail of product
