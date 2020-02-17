@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.shortcuts import reverse
+from django.template.defaultfilters import slugify
 
 CATEGORY_CHOICES = (
     ('S', 'Shirt'),
@@ -22,10 +23,13 @@ class Item(models.Model):
     discount_price = models.FloatField(blank=True, null=True)
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=2)
     label = models.CharField(choices=LABEL_CHOICES, max_length=1)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
 
     def __str__(self):
         return self.title
+
+    def slug(self):
+        return slugify(self.title)
 
     def get_add_to_cart_url(self):
         return reverse("core:add-to-cart", kwargs={"slug": self.slug})
