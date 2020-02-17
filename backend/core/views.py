@@ -36,7 +36,7 @@ class OrderSummary(LoginRequiredMixin, View):
             context = {
                 'ordered_products': ordered_product
             }
-            return render(self.request, 'core/order_summary.html',context)
+            return render(self.request, 'core/order_summary.html', context)
 
         except ObjectDoesNotExist:
             return render(self.request, 'core/order_summary.html')
@@ -60,5 +60,3 @@ def checkout(request):
     :param request:
     """
     return render(request, 'core/checkout.html', context)
-
-
