@@ -24,7 +24,7 @@ def register(request):
             # message [success]
             messages.success(request, 'Your account has been created!')
             # Redirect to login-page
-            return redirect('/')
+            return redirect('login')
 
     # no requested data
     else:
