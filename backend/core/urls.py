@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.decorators.cache import cache_page
 try:
     from core.views import (Home, OrderSummary, ProductDetail)
     from core.cart_views import (
@@ -12,7 +13,7 @@ app_name = 'core'
 
 urlpatterns = [
     # home
-    path('', Home.as_view(), name='home'),
+    path('', cache_page(60*60)(Home.as_view()), name='home'),
     # user cart
     path('order-summary/', OrderSummary.as_view(), name='order-summary'),
     # detail of product
