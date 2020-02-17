@@ -14,7 +14,7 @@ def register(request):
     """
     # check request method
     if request.method == "POST":
-        form = UserRegistrationForm(request.POST)
+        form = UserRegistrationForm(request.POST or None)
         # validate form
         if form.is_valid():
             form.save()
@@ -23,7 +23,7 @@ def register(request):
             # message [success]
             messages.success(request, 'Your account has been created!')
             # Redirect to login-page
-            return redirect('profile/')
+            return redirect('register/')
 
     # no requested data
     else:
