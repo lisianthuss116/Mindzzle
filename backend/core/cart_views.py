@@ -99,6 +99,9 @@ def decrease_quantity(request, slug):
                 order_item.quantity -= 1
                 order_item.save()
                 messages.warning(request, 'This item quantity was updated')
+                if order_item.quantity == 0:
+                    ordered_product = Order.objects.get(username_order=request.user, ordered=False)
+                    ordered_product.delete()
             else :
                 ordered_product = Order.objects.get(
                 username_order=request.user, ordered=False)
