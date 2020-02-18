@@ -167,4 +167,13 @@ html .a-no-decoration {
 html .a-no-decoration:hover {
   text-decoration: none !important;
 }
+.image-container {
+  position: relative;
+}
+.image{
+  display: block;
+  width: fit-content;
+  height: auto;
+  transition: .5s ease;
+}
 /*# sourceMappingURL=style.css.map */

@@ -10,6 +10,8 @@ class UserRegistrationForm(UserCreationForm):
         model = User
         fields = [
             'username',
+            'first_name',
+            'last_name',
             'email',
             'password1',
             'password2',
@@ -17,10 +19,10 @@ class UserRegistrationForm(UserCreationForm):
 
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
-
     class Meta:
-        model  = User
-        fields = ['username', 'email']
+        model    = User
+        fields   = ['username','first_name','last_name', 'email']
+        attrs    = {'readonly':True}
 
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
