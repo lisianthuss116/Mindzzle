@@ -4,11 +4,13 @@
 <div class="container mt-5 mb-5">
     <div class="row mt-5">
         {% for item in object_list %}
-        <div class="card border-radius-015 mt-3 mr-5">
+        <div class="card border-radius-015 mt-3 mr-4" style="width:16rem;">
             <div class="card-body">
                 <p class="card-text">
                     <a href="{{ item.get_absolute_url }}">{{item}}</a>
-                    <span class="small badge p-2">&nbsp;&nbsp;&nbsp;-{{ item.get_category_display }}</span>
+                    <span class="small badge p-2 float-right">
+                        &nbsp;&nbsp;&nbsp;-{{ item.get_category_display }}
+                    </span>
                 </p>
             </div>
         </div>
