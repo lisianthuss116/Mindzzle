@@ -2,8 +2,9 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
+from account.views import register, profile
+from Ecommerce.api_routers import router
 from django.contrib.auth import views as auth_view
-from account.views import register,profile
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -13,13 +14,15 @@ urlpatterns = [
     # register
     path('register/', register, name='register'),
     # accounts
-    path('profile/', profile, name='profile' ),
+    path('profile/', profile, name='profile'),
     # login
     path('login/', auth_view.LoginView.as_view(
         template_name='auth/login.html'), name='login'),
     # logout
     path('logout/', auth_view.LogoutView.as_view(
         template_name='auth/logout.html'), name='logout'),
+    # api
+    path('api/v1/', include(router.urls)),
 ]
 
 if settings.DEBUG:

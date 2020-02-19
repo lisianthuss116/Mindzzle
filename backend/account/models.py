@@ -4,7 +4,6 @@ from PIL import Image
 
 
 class Profile(models.Model):
-
     user_account_name = models.OneToOneField(User, on_delete=models.CASCADE)
     user_image = models.ImageField(
         default='avatar.svg',
@@ -13,4 +12,3 @@ class Profile(models.Model):
 
     def __str__(self):
         return f'{self.user_account_name.username} Profile'
-    
