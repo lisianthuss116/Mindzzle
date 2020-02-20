@@ -1,11 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
+from PIL import Image
 
 
 class Profile(models.Model):
     user_account_name = models.OneToOneField(User, on_delete=models.CASCADE)
     user_image = models.ImageField(
-        default='default.jpg', upload_to='user_image')
+        default='avatar.svg',
+        upload_to='user_image')
     created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
