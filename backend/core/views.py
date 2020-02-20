@@ -16,6 +16,8 @@ class Home(ListView):
     """
     # models
     model = Item
+    # set order-by
+    ordering = ['-date_created']
     # set pagianation
     paginate_by = 20
     # template directory
