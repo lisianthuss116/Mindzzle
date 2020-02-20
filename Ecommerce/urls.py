@@ -2,9 +2,10 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
-from account.views import register, profile
+from account.views import (register, profile, LoginView, LogoutView)
 from Ecommerce.api_routers import router
 from django.contrib.auth import views as auth_view
+from rest_framework.authtoken import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,6 +24,9 @@ urlpatterns = [
         template_name='auth/logout.html'), name='logout'),
     # api
     path('api/v1/', include(router.urls)),
+    # path('api/v1/auth/login', LoginView.as_view()),
+    # path('api/v1/auth/logout', LogoutView.as_view()),
+    path('api-token-auth/', views.obtain_auth_token, name='api-token-auth')
 ]
 
 if settings.DEBUG:

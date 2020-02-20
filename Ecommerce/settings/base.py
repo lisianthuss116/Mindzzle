@@ -3,7 +3,7 @@ import sys
 import environ
 import dj_database_url
 
-env = environ.Env(DEBUG=(bool, False))
+env = environ.Env(DEBUG=(bool, True))
 environ.Env.read_env('./.env')
 
 DEBUG = True
@@ -26,9 +26,19 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     # third party
     'rest_framework',
+    'rest_framework.authtoken',
     'crispy_forms',
     'django_countries',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAdminUser',
+    )
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
