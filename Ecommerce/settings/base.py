@@ -3,7 +3,7 @@ import sys
 import environ
 import dj_database_url
 
-env = environ.Env(DEBUG=(bool, False))
+env = environ.Env(DEBUG=(bool, True))
 environ.Env.read_env('./.env')
 
 DEBUG = True
@@ -26,8 +26,19 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     # third party
     'rest_framework',
+    'rest_framework.authtoken',
     'crispy_forms',
+    'django_countries',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -61,7 +72,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Ecommerce.wsgi.application'
 
-
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -94,5 +104,6 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'login'
