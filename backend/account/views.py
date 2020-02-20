@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
-from api.serializers import LoginSerializer
+# from api.serializers import LoginSerializer
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required

@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
-from account.views import (register, profile, LoginView, LogoutView)
+from account.views import (register, profile) #Remind me to include LoginView & LogoutView
 from Ecommerce.api_routers import router
 from django.contrib.auth import views as auth_view
 from rest_framework.authtoken import views
