@@ -85,7 +85,7 @@ def decrease_quantity(request, slug):
     :param request:
     :param slug:
     """
-    
+
     item = get_object_or_404(Item, slug=slug)
     order_qset = Order.objects.filter(
         username_order=request.user, ordered=False)
