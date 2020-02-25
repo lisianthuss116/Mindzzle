@@ -4,6 +4,7 @@ from PIL import Image
 # import datetime
 from datetime import datetime, timedelta
 
+
 class Profile(models.Model):
     user_account_name = models.OneToOneField(User, on_delete=models.CASCADE)
     user_image = models.ImageField(
