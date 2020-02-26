@@ -21,6 +21,7 @@ LABEL_CHOICES = (
 class Item(models.Model):
     title = models.CharField(max_length=100)
     price = models.FloatField()
+    quantity = models.IntegerField(default=1)
     description_item = models.TextField(default="a new product")
     discount_price = models.FloatField(blank=True, null=True)
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=2)
