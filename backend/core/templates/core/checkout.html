@@ -2,7 +2,6 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-
 <main>
     <div class="container wow fadeIn">
         <h2 class="my-5 h2 text-center">Checkout form</h2>
@@ -14,7 +13,6 @@
                         {{form|crispy}}
                         <hr class="mb-4">
                         <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
-
                     </form> -->
                     <form method="POST" class="card-body">
                         {% csrf_token %}
