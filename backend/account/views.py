@@ -1,71 +1,138 @@
-from .forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
-from account.forms import UserRegistrationForm, UserLoginForm
-from .models import Profile
+from django.views.decorators.http import require_http_methods
+from django.views import View
+from django.template.loader import get_template
+from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.contrib import admin, messages
+from django.contrib.auth import authenticate, login as login_auth
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.conf import settings
+from django.core.mail import EmailMessage, send_mail
+from django.core.mail.backends.smtp import EmailBackend
+
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
-# from api.serializers import LoginSerializer
-from django.views.decorators.http import require_http_methods
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login as login_auth
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import admin
-from django.contrib import messages
-from account.services import *
+
+from account.forms import (
+    UserRegistrationForm,
+    UserLoginForm,
+    UserUpdateForm,
+    ProfileUpdateForm)
+from account.models import Profile
+from account.services.tokens import user_tokenizer
+from account.services.email import email
+from account.services import activation_key, generate
 
 
-def activation(request, key):
-    activation_expired = False
-    already_active = False
-    profile = get_object_or_404(Profile, activation_key=key)
-    if profile.user.is_active == False:
-        if timezone.now() > profile.key_expires:
-            activation_expired = True
-            user_id = profile.user.id
-        else:
-            profile.user.is_active = True
-            profile.user.save()
-    else:
-        already_active = True
-
-    return render(request, 'account/activation.html', locals())
-
-
-@require_http_methods(['GET', 'POST'])
-def register(request):
+class RegisterView(View):
     """
     user register new account
 
     :param request:
-    :method POST:
+    :method POST | GET:
     :return render register page
     """
-    # check request method
-    if request.method == "POST":
+
+    def get(self, request):
+        """
+        user register form
+
+        :param request:
+        """
+        # render register page [if user is not give any post request]
+        return render(request, 'auth/register.html',
+                      {'form': UserRegistrationForm()})
+
+    def post(self, request):
+        """
+        user register form [post data user]
+
+        :param request:
+        """
+        # get requested post form
         form = UserRegistrationForm(request.POST or None)
         # validate form
         if form.is_valid():
+            # set datas variables
             datas = {}
             datas['email'] = form.cleaned_data['email']
             datas['username'] = form.cleaned_data['username']
             datas['password1'] = form.cleaned_data['password1']
+            datas['activation_key'] = []
+            # set username salt
+            username_salt = datas['username'].encode('utf-8')
+            # set activation key
+            datas['activation_key'] = activation_key.activation_code(
+                username_salt)
+            # save user [account not verificated yet] bring some datas
+            user = form.save(datas)
+            user.is_valid = False
+            user.save()
 
-            username_salt = datas['username']
-            username_salt = username_salt.encode('utf-8')
-            datas['activation_key'] = activation_code(username_salt)
+            # generate token
+            token = user_tokenizer.make_token(user)
+            # generate user-id
+            user_id = generate.set_user_id(user.id)
+            # create url activation
+            url = 'http://127.0.0.1:8000' + reverse('confirm-email',
+                                                    kwargs={'user_id': user_id, 'token': token})
+            message = url
+            # email to user-email [new-user-account]
+            email(request, user.email, message)
 
-            form.save(datas)
-            # message [success]
-            messages.success(request, 'Your account has been created!')
-            # Redirect to login-page
-            return redirect('login')
-    # no requested data
-    else:
-        form = UserRegistrationForm()
+            # render login page after register, and give some message that user-account is not verificated yet
+            return render(request, 'auth/login.html', {
+                'form': AuthenticationForm(),
+                'message': f'A confirmation email has been sent to {user.email}. Please confirm to finish registering {token}'
+            })
+        # register-form is not valid, return to register page
+        return render(request, 'auth/register.html',
+                      {'form': UserRegistrationForm()})
 
-    return render(request, 'auth/register.html', {'form': form})
+
+class ConfirmRegisterView(View):
+    def get(self, request, user_id, token):
+        """
+        user success confirmation activation page
+
+        :param request:
+        :param user_id:
+        :param token:
+        """
+        # get user id
+        user_id = generate.get_real_user_id(user_id)
+        # check if user has been registered and not activated
+        if get_object_or_404(User.objects.all(), pk=user_id):
+            # get user and user-profile
+            user = User.objects.get(pk=user_id)
+            user_profile = Profile.objects.get(user_account_name=user_id)
+            # [failed] message
+            context = {
+                'form': AuthenticationForm(),
+                'message': 'Registration confirmation error . Please click the reset password to generate a new confirmation email.'}
+
+            # check user and user token
+            if user and user_tokenizer.check_token(user, token):
+                # user had been activated
+                user.is_valid = True
+                # user-profile had been activated
+                user_profile.is_valid = True
+                user_profile.activation_key = activation_key.activation_code(
+                    user_id)
+
+                # save new user [user has been activated]
+                user.save()
+                user_profile.save()
+                # [success] message
+                context['message'] = 'Registration complete, Please login.'
+
+            # render activation page
+            return render(request, 'account/activation.html', context)
 
 
 @require_http_methods(['GET', 'POST'])
