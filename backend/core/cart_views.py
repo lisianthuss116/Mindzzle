@@ -96,16 +96,21 @@ def decrease_quantity(request, slug):
         if order.items.filter(item__slug=item.slug).exists():
             order_item = OrderItem.objects.filter(
                 item=item, username_order_item=request.user, ordered=False)[0]
+            check_order = OrderItem.objects.filter(
+                username_order_item=request.user, ordered=False)
             if order_item.quantity > 0:
                 order_item.quantity -= 1
                 order_item.save()
                 messages.warning(request, 'This item quantity was updated')
                 if order_item.quantity == 0:
-                    ordered_product = Order.objects.get(username_order=request.user, ordered=False)
-                    ordered_product.delete()
-            else :
+                    order_item.delete()
+                    ordered_product = Order.objects.get(
+                        username_order=request.user, ordered=False)
+                    if not check_order:
+                        ordered_product.delete()
+            else:
                 ordered_product = Order.objects.get(
-                username_order=request.user, ordered=False)
+                    username_order=request.user, ordered=False)
                 ordered_product.delete()
 
         return redirect('core:order-summary')
