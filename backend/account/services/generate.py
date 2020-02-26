@@ -16,12 +16,3 @@ def get_real_user_id(number):
 
     user_id = int(set_id)
     return user_id
-
-x = 102
-
-SET_ID = set_user_id(x)
-GET_ID = get_real_user_id(SET_ID)
-
-print(f"{x} : {type(x)}")
-print(f"{SET_ID} : {type(SET_ID)}")
-print(f"{GET_ID} : {type(GET_ID)}")
