@@ -1,21 +1,30 @@
 from django.conf import settings
-from django.contrib import admin
-from django.urls import path, include
 from django.conf.urls import url
 from django.conf.urls.static import static
-from account.views import (register, profile, login)
-from Ecommerce.api_routers import router
+from django.contrib import admin
 from django.contrib.auth import views as auth_view
-from rest_framework.authtoken import views
+from django.urls import path, include
+
+from account.views import (
+    RegisterView,
+    ConfirmRegisterView,
+    profile,
+    login)
+from Ecommerce.api_routers import router
 import re
+
+from rest_framework.authtoken import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # core
     path('', include('core.urls', namespace='core')),
+    # confim-email
+    path('confirm-email/<str:user_id>/<str:token>',
+         ConfirmRegisterView.as_view(), name='confirm-email'),
 
     # register
-    path('register/', register, name='register'),
+    path('register/', RegisterView.as_view(), name='register'),
     # accounts
     path('profile/', profile, name='profile'),
     # login
