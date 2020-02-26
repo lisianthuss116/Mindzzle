@@ -18,9 +18,18 @@ password_validate = """
 
 class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField(
-        help_text='Must be a valid email. And consider to using @gmail, or etc.')
+        help_text='Must be a valid email. And consider to using @gmail, or etc.',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'e.g : johndoe32@gmail.com',
+            'autofocus': 'on'
+        }))
     username = forms.CharField(
-        max_length=50, help_text='Please consider when creating the username, because you will cannot change your username !')
+        max_length=50,
+        help_text='Please consider when creating the username, because you will cannot change your username !',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'e.g : John Doe',
+            'autofocus':'off'
+        }))
 
     class Meta:
         model = User
@@ -34,7 +43,6 @@ class UserRegistrationForm(UserCreationForm):
     def save(self, datas):
         user = User.objects.create_user(
             datas['username'], datas['email'], datas['password1'])
-        user.is_activate = False
         user.save()
 
         profile = Profile()
