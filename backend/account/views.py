@@ -63,12 +63,8 @@ class RegisterView(View):
             datas['email'] = form.cleaned_data['email']
             datas['username'] = form.cleaned_data['username']
             datas['password1'] = form.cleaned_data['password1']
-            datas['activation_key'] = []
             # set username salt
             username_salt = datas['username'].encode('utf-8')
-            # set activation key
-            datas['activation_key'] = activation_key.activation_code(
-                username_salt)
             # save user [account not verificated yet] bring some datas
             user = form.save(datas)
             user.is_valid = False
@@ -76,7 +72,7 @@ class RegisterView(View):
 
             # generate token
             token = user_tokenizer.make_token(user)
-            # generate user-id
+            # generate unique user-id
             user_id = generate.set_user_id(user.id)
             # create url activation
             url = 'http://127.0.0.1:8000' + reverse('confirm-email',
@@ -88,7 +84,7 @@ class RegisterView(View):
             # render login page after register, and give some message that user-account is not verificated yet
             return render(request, 'auth/login.html', {
                 'form': AuthenticationForm(),
-                'message': f'A confirmation email has been sent to {user.email}. Please confirm to finish registering {token}'
+                'message': f'A confirmation email has been sent to {user.email}. Please confirm to finish registering'
             })
         # register-form is not valid, return to register page
         return render(request, 'auth/register.html',
