@@ -13,6 +13,7 @@ class Profile(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     activation_key = models.CharField(max_length=100, blank=True)
     key_expires = models.TextField(default=datetime.now()+timedelta(days=2), editable=False, max_length=20)
+    is_valid = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.user_account_name.username} Profile'
