@@ -34,6 +34,7 @@ urlpatterns = [
         template_name='auth/logout.html'), name='logout'),
     # api
     path('api/v1/', include(router.urls)),
+    path('api/v2/', include('api.urls', namespace='api')),
     path('api-token-auth/', views.obtain_auth_token, name='api-token-auth')
 ]
 
