@@ -25,7 +25,7 @@ class UserRegistrationForm(UserCreationForm):
         }))
     username = forms.CharField(
         max_length=50,
-        help_text='Please consider when creating the username, because you will cannot change your username !',
+        help_text='Please consider when creating the username, because you will cannot change your username more than 1 times!',
         widget=forms.TextInput(attrs={
             'placeholder': 'e.g : John Doe',
             'autofocus':'off'
