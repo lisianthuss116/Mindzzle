@@ -1,5 +1,7 @@
 .env
 __pycache__
 tests.py
-*migrations
-*vendor
+
+migrations
+vendor
+media
