@@ -15,13 +15,15 @@ django-email==0.1.10
 django-environ==0.4.5
 django-ipware==2.1.0
 django-redis==4.11.0
-djangorestframework==3.9.0
+djangorestframework==3.11.0
 environ==1.0
 httpie==2.0.0
 idna==2.9
+loadtest==0.0.2
 pep8==1.7.1
 Pillow==7.0.0
 psycopg2==2.8.4
+psycopg2-binary==2.8.4
 pycodestyle==2.5.0
 pycparser==2.19
 Pygments==2.5.2
