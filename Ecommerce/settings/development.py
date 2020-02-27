@@ -10,7 +10,7 @@ DATABASE_URL = env('DB_URL')
 DATABASES['default'] = dj_database_url.parse(DATABASE_URL, conn_max_age=None)
 
 # CACHE STORAGE USING REDIS
-CACHE_TTL = 60 * 10 # 60 minutes| 1 hour
+CACHE_TTL = 60 * 10 # 60 minutes | 1 hour
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
