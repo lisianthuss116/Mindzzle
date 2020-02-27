@@ -44,9 +44,6 @@ class UserRegistrationForm(UserCreationForm):
         user = User.objects.create_user(
             datas['username'], datas['email'], datas['password1'])
         user.save()
-
-        profile = Profile()
-        profile.activation_key = datas['activation_key']
         return user
 
 
