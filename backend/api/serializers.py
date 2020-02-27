@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from core.models import Item
 
-class ItemsSerializer(serializers.HyperlinkedModelSerializer):
+class ItemSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Item
         fields = [
