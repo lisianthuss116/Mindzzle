@@ -1,12 +1,21 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, View
-from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.utils import timezone
-from .forms import CheckoutForm
-from .models import Item, OrderItem, Order, BillingAddress
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
+from core.forms import CheckoutForm
+import requests
+from core.models import (
+    Item,
+    OrderItem,
+    Order,
+    BillingAddress)
 
 
 class Home(ListView):
@@ -15,12 +24,22 @@ class Home(ListView):
 
     :return render all products
     """
-    # models
-    model = Item
-    # set pagianation
-    paginate_by = 20
-    # template directory
+    model = Item.objects.all()
+    paginate_by = 25
     template_name = 'core/home-page.html'
+
+    @method_decorator(login_required)
+    def get(self, request):
+        item_from_api = requests.get('http://127.0.0.1:8000/api/v2/items/')
+        json = item_from_api.json()
+
+        paginator = Paginator(self.model.order_by(
+            'created_date'), self.paginate_by)
+        page = request.GET.get('page')
+        products = paginator.get_page(page)
+        context = {'items': products, 'json_data':json}
+
+        return render(request, self.template_name, context)
 
 
 class OrderSummary(LoginRequiredMixin, View):
