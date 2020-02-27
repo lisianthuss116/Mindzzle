@@ -25,4 +25,4 @@ def email(request, receiver_email, message):
         fail_silently=False,
     )
 
-    return redirect('login')
+    return redirect('auth:login')
