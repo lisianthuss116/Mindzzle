@@ -1,9 +1,12 @@
 from django.conf import settings
+from django.utils import timezone
 from django.db import models
-from django.shortcuts import reverse
+
 from django.template.defaultfilters import slugify
-from unidecode import unidecode
+from django.shortcuts import reverse
 from django_countries.fields import CountryField
+
+from unidecode import unidecode
 
 CATEGORY_CHOICES = (
     ('S', 'Shirt'),
@@ -27,6 +30,7 @@ class Item(models.Model):
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=2)
     label = models.CharField(choices=LABEL_CHOICES, max_length=2)
     slug = models.SlugField(blank=True, null=True, unique=True)
+    created_date = models.DateTimeField(default=timezone.now())
 
     def __str__(self):
         return self.title
