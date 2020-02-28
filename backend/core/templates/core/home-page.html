@@ -3,14 +3,11 @@
 {% block content %}
 <div class="container mt-5 mb-5">
     <div class="row mt-5">
-        {% for item in items %}
+        {% for x in items %}
         <div class="card border-radius-015 mt-3 mr-4" style="width:16rem;">
             <div class="card-body">
                 <p class="card-text">
-                    <a href="{{ item.get_absolute_url }}">{{item}}</a>
-                    <span class="small badge p-2 float-right">
-                        &nbsp;&nbsp;&nbsp;-{{ item.get_category_display }}
-                    </span>
+                    <a href="{% url 'core:product' slug=x.slug %}">{{ x.title }}</a>
                 </p>
             </div>
         </div>
