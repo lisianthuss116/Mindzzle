@@ -2,17 +2,15 @@ from django.urls import path
 from django.views.decorators.cache import cache_page
 try:
     from core.views import (
-                    Home,
+                    Home, home_view,
                     OrderSummary,
                     ProductDetail,
-                    CheckoutView
-                    )
+                    CheckoutView)
     from core.cart_views import (
                     add_to_cart,
                     remove_from_cart,
                     decrease_quantity,
-                    increase_quantity
-                    )
+                    increase_quantity)
 
 except ImportError:
     raise ImportError(
