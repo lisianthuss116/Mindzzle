@@ -1,6 +1,12 @@
 from django.conf import settings
+from django.utils import timezone
 from django.db import models
+
+from django.template.defaultfilters import slugify
 from django.shortcuts import reverse
+from django_countries.fields import CountryField
+
+from unidecode import unidecode
 
 CATEGORY_CHOICES = (
     ('S', 'Shirt'),
@@ -18,14 +24,22 @@ LABEL_CHOICES = (
 class Item(models.Model):
     title = models.CharField(max_length=100)
     price = models.FloatField()
+    quantity = models.IntegerField(default=1)
     description_item = models.TextField(default="a new product")
     discount_price = models.FloatField(blank=True, null=True)
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=2)
-    label = models.CharField(choices=LABEL_CHOICES, max_length=1)
-    slug = models.SlugField()
+    label = models.CharField(choices=LABEL_CHOICES, max_length=2)
+    slug = models.SlugField(blank=True, null=True, unique=True)
+    created_date = models.DateTimeField(default=timezone.now())
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            # Newly created object, so set slug
+            self.slug = slugify(unidecode(self.title))
+        super(Item, self).save(*args, **kwargs)
 
     def get_add_to_cart_url(self):
         return reverse("core:add-to-cart", kwargs={"slug": self.slug})
@@ -75,6 +89,10 @@ class Order(models.Model):
     start_date = models.DateTimeField(auto_now_add=True)
     order_date = models.DateTimeField()
     ordered = models.BooleanField(default=False)
+    billing_Address = models.ForeignKey(
+        'BillingAddress',
+        on_delete=models.SET_NULL,blank=True, null=True
+        )
 
     def __str__(self):
         return f'{self.username_order.username} Order'
@@ -84,3 +102,14 @@ class Order(models.Model):
         for order_item in self.items.all():
             total += order_item.get_final_price()
         return total
+
+class BillingAddress(models.Model):
+    username_order = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                          on_delete=models.CASCADE)
+    street_address = models.CharField(max_length=100)
+    apartment_address = models.CharField(max_length=100)
+    country = CountryField(multiple=False)
+    billing_zip = models.CharField(max_length=10)
+
+    def __str__(self):
+        return f'{self.username_order.username}'

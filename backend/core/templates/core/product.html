@@ -37,13 +37,14 @@
                             {% endif %}
                             <strong>Description</strong>
                             <p>{{ object.description_item }}</p>
+                            <strong class="mt-2">Quantity</strong>
+                            <span>: {{ object.quantity }} stock available</s>
                         </div>
                     </div>
                 </p>
                 <div class="card-text mt-5 d-flex">
                     <div class="ml-auto mr-5">
                         <a href="{{ object.get_add_to_cart_url }}" class="badge badge-info p-2 mr-3">Add to cart</a>
-                        <a href="{{ object.get_remove_from_cart_url }}" class="text-danger" class="badge badge-danger p-2">Remove from cart</a>
                     </div>
                 </div>
             </div>

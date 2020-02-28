@@ -55,26 +55,25 @@ def remove_from_cart(request, slug):
     :param request:
     :param slug:
     """
-    # get item, otherwise give 404
     item = get_object_or_404(Item, slug=slug)
-    # check if user had an order
-    order_querySet = Order.objects.filter(
+    order_qset = Order.objects.filter(
         username_order=request.user, ordered=False)
-    # if user had an order
-    if order_querySet.exists():
-        # get|grab the order
-        order = order_querySet[0]
-        # check if the order item is in the order | slug
-        if order.items.filter(item__slug=item.slug).exists():
-            # delete the order item
-            order_item = OrderItem.objects.filter(
-                item=item, username_order_item=request.user, ordered=False)[0]
-            order_item.delete()
-            # delete the order
-            Order.objects.filter(username_order=request.user).delete()
-            messages.warning(request, 'This item was removed from your cart')
-            return redirect('core:order-summary')
 
+    if order_qset.exists():
+        order_item = order_qset[0]
+
+        if order_item.items.filter(item__slug=item.slug).exists():
+            if OrderItem.objects.filter(username_order_item=request.user):
+                OrderItem.objects.filter(username_order_item=request.user).delete()
+                messages.warning(
+                    request, 'This item was removed from your cart')
+
+            ordered_product = Order.objects.get(
+                username_order=request.user, ordered=False)
+            if not ordered_product.items.all():
+                ordered_product.delete()
+
+        return redirect('core:order-summary')
     return False
 
 
@@ -86,35 +85,35 @@ def decrease_quantity(request, slug):
     :param request:
     :param slug:
     """
-    # get item, otherwise give 404
+
     item = get_object_or_404(Item, slug=slug)
-    # check if user had an order
-    order_querySet = Order.objects.filter(
+    order_qset = Order.objects.filter(
         username_order=request.user, ordered=False)
-    # if user had an order
-    if order_querySet.exists():
-        # get|grab the order
-        order = order_querySet[0]
-        # check if the order item is in the order
+
+    if order_qset.exists():
+        order = order_qset[0]
+
         if order.items.filter(item__slug=item.slug).exists():
             order_item = OrderItem.objects.filter(
                 item=item, username_order_item=request.user, ordered=False)[0]
-            # delete the order items
-            if order_item.quantity <= 1 or order_item.quantity < 0:
-                order_item.delete()
-                # delete the order
-                Order.objects.filter(
-                    username_order=request.user, items=item).delete()
-                messages.warning(
-                    request, 'This item was removed from your cart')
-            # decrease the quantity of items in the cart
-            else:
+            check_order = OrderItem.objects.filter(
+                username_order_item=request.user, ordered=False)
+            if order_item.quantity > 0:
                 order_item.quantity -= 1
                 order_item.save()
                 messages.warning(request, 'This item quantity was updated')
+                if order_item.quantity == 0:
+                    order_item.delete()
+                    ordered_product = Order.objects.get(
+                        username_order=request.user, ordered=False)
+                    if not check_order:
+                        ordered_product.delete()
+            else:
+                ordered_product = Order.objects.get(
+                    username_order=request.user, ordered=False)
+                ordered_product.delete()
 
-            return redirect('core:order-summary')
-
+        return redirect('core:order-summary')
     return False
 
 

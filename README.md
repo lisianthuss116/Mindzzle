@@ -1,3 +1,3 @@
 # Mindzzle
 
-Project | Learn create E-commerce using django
+Learn create E-commerce using django

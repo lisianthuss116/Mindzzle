@@ -1,23 +1,38 @@
 from django.conf import settings
-from django.contrib import admin
-from django.urls import path, include
+from django.conf.urls import url
 from django.conf.urls.static import static
-from account.views import register
+from django.contrib import admin
 from django.contrib.auth import views as auth_view
+from django.urls import path, include
+
+from rest_framework.authtoken import views
+
+from account.views import auth
+from Ecommerce.api_routers import router
+auth_url = 'account.routers.auth_url'
+profile_url = 'account.routers.profile_url'
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # core
     path('', include('core.urls', namespace='core')),
-
-    # register
-    path('register/', register, name='register'),
-    # login
-    path('login/', auth_view.LoginView.as_view(
-        template_name='auth/login.html'), name='login'),
+    # auth
+    path('auth/', include(auth_url, namespace='auth')),
+    # accounts
+    path('profile/', include(profile_url, namespace='profile')),
     # logout
     path('logout/', auth_view.LogoutView.as_view(
         template_name='auth/logout.html'), name='logout'),
+    # api
+    path('api/v1/', include(router.urls)),
+    path('api/v2/', include('api.urls', namespace='api')),
+    path('api-token-auth/', views.obtain_auth_token, name='api-token-auth'),
+
+    # confim-email
+    path('confirm-email/<str:user_id>/<str:token>',
+         auth.ConfirmRegisterView.as_view(), name='confirm-email'),
 ]
 
 if settings.DEBUG:

@@ -18,43 +18,32 @@
                 <p>Shit image</p>
             </div>
             <div class="col-lg-9 col-sm-12">
-                <p>
-                    <a href="{{ product.item.get_absolute_url }}" class="a-no-decoration font-weight-bold">
-                        {{ product.item.title }}
-                    </a>
-                </p>
-                <span>
-                    {% if product.item.discount_price %}
-                    <p>
-                        <del class="text-secondary ">${{ product.item.price }}</del>
-                        &nbsp;&nbsp;
-                        <span style="color:#FA591D;" class="font-weight-bold">${{ product.item.discount_price }}</span>
-                    </p>
-                    {% else %}
-                    <p>${{ product.item.price }}</p>
-                    {% endif %}
-                </span>
-                <span class="">
-                    Total item price :&nbsp;
-                    {% if product.item.discount_price %}
-                    <span style="color:#FA591D;" class="font-weight-bold">
-                        ${{ product.get_total_discount_item_price }}
-                    </span>
-                    {% else %}
-                    <span style="color:#FA591D;" class="font-weight-bold">
-                        ${{ product.get_total_item_price }}
-                    </span>
-                    {% endif %}
-                </span>
-                <span class="mt-5 float-right">
-                    <span class="mr-2">Quantity :</span>
-                    <a href="{% url 'core:decrease-quantity' product.item.slug %}">-</a>&nbsp;
-                    {{ product.quantity }}
-                    &nbsp;<a href="{% url 'core:increase-quantity' product.item.slug %}">+</a>
-                </span>
-                <div class="row mt-5">
-                    <div class="col-12">
-                        <a class="mt-1 float-right text-danger font-weight-bold" href="{% url 'core:remove-from-cart' product.item.slug %}">Remove item</a>
+                <div class="row">
+                    <div class="col-8">
+                        <h4>
+                            <a href="{{ product.item.get_absolute_url }}" class="a-no-decoration font-weight-bold">
+                                {{ product.item.title }}
+                            </a>
+                        </h4>
+                        <span>
+                            {% if product.item.discount_price %}
+                            <p>
+                                <del class="text-secondary ">${{ product.item.price }}</del>
+                                &nbsp;&nbsp;
+                                <span style="color:#FA591D;" class="font-weight-bold">${{ product.item.discount_price }}</span>
+                            </p>
+                            {% else %}
+                            <p>${{ product.item.price }}</p>
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="col-4">
+                        <span class="mt-4 float-right mr-5">
+                            <a href="{% url 'core:decrease-quantity' product.item.slug %}" class="font-1rem mr-3">-</a>
+                            <span class="font-1rem">{{ product.quantity }}</span>
+                            <a href="{% url 'core:increase-quantity' product.item.slug %}" class="font-1rem ml-3">+</a>
+                        </span>
+                        <a class="mt-5 float-right text-danger mr-4" href="{% url 'core:remove-from-cart' product.item.slug %}">Remove item</a>
                     </div>
                 </div>
             </div>

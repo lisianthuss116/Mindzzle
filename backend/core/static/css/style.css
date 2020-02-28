@@ -146,6 +146,20 @@
   font-size: 10.5rem;
 }
 
+.alert-error {
+  color: #721c24 !important;
+  background-color: #f8d7da !important;
+  border-color: #f5c6cb !important;
+}
+
+.alert-error hr {
+  border-top-color: #f1b0b7 !important;
+}
+
+.alert-error .alert-link {
+  color: #491217 !important;
+}
+
 html {
   scroll-behavior: smooth;
   overflow-x: hidden !important;

@@ -7,7 +7,5 @@ class AccountConfig(AppConfig):
     def ready(self):
         """
         override to perform initialization for registering signals
-
-        :param self:
         """
-        import account.automation
+        import account.services.automation
