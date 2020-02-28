@@ -12,7 +12,7 @@ def email(request, receiver_email, message):
 
     subject = 'Dj-Ecommerce Registration, Activate your account'
     message = f'''
-    Please click the link below to start activate your account, this link will be able to recive under than 48 hours. if this is not your own doing, you can delete or permit the message. Thank you !
+    Please click the link below to start activate your account, this message will be able to recive under than 24 hours. if this is not your own doing, you can delete or permit the message. Thank you !
 
     {message}
     '''
