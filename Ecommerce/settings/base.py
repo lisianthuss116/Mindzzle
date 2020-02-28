@@ -1,6 +1,6 @@
-import os
-import sys
 import environ
+from django.contrib.messages import constants as message_constants
+import sys, os
 import dj_database_url
 
 env = environ.Env(DEBUG=(bool, True))
@@ -104,8 +104,15 @@ EMAIL_BACKEND = env('EMAIL_BACKEND')
 EMAIL_USE_TLS = env('EMAIL_USE_TLS')
 EMAIL_HOST = env('EMAIL_HOST')
 EMAIL_PORT = env('EMAIL_PORT')
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = 'djangocoFresh@gmail.com'
+EMAIL_HOST_PASSWORD = 'xdzpztwngkgugjvc'
+
+# Message tags
+MESSAGE_TAGS = {message_constants.DEBUG: 'debug',
+                message_constants.INFO: 'info',
+                message_constants.SUCCESS: 'success',
+                message_constants.WARNING: 'warning',
+                message_constants.ERROR: 'danger',}
 
 
 MEDIA_URL = '/media/'
