@@ -25,17 +25,17 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white mr-3" href="{% url 'profile'%}">Profile</a> 
+                <a class="nav-link text-white mr-3" href="{% url 'profile:profile' %}">Profile</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
             </li>
             {% else %}
             <li class="nav-item">
-                <a class="nav-link text-white" href="{% url 'login' %}">Login</a>
+                <a class="nav-link text-white" href="{% url 'auth:login' %}">Login</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" href="{% url 'register' %}">Register</a>
+                <a class="nav-link text-white" href="{% url 'auth:register' %}">Register</a>
             </li>
             {% endif %}
         </ul>
