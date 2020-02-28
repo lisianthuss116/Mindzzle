@@ -9,6 +9,17 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
+# Caches
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.views.decorators.cache import cache_page
+from django.core import serializers
+from django.core.cache import cache
+from django.conf import settings
+from api.serializers import AllItemSerializer
+from rest_framework.decorators import api_view
+from rest_framework import status, viewsets
+from rest_framework.parsers import JSONParser
+
 from core.forms import CheckoutForm
 import requests
 from core.models import (
@@ -16,6 +27,8 @@ from core.models import (
     OrderItem,
     Order,
     BillingAddress)
+
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
 class Home(ListView):
@@ -28,18 +41,41 @@ class Home(ListView):
     paginate_by = 25
     template_name = 'core/home-page.html'
 
-    @method_decorator(login_required)
     def get(self, request):
-        item_from_api = requests.get('http://127.0.0.1:8000/api/v2/items/')
-        json = item_from_api.json()
-
         paginator = Paginator(self.model.order_by(
             'created_date'), self.paginate_by)
         page = request.GET.get('page')
         products = paginator.get_page(page)
-        context = {'items': products, 'json_data':json}
+        # context data
+        context = {
+            'items': products}
 
         return render(request, self.template_name, context)
+
+def home_view(request):
+    url = 'https://ghibliapi.herokuapp.com/films/'
+    url2 = 'http://127.0.0.1:8000/api/v2/items/'
+    ghibli_data = requests.get(url=url).json()
+    paginate_by = 25
+    template_name = 'core/home-page.html'
+
+    if 'item_list' in cache:
+        item_list = cache.get('item_list')
+    else:
+        data = serializers.serialize("json", Item.objects.all())
+        cache.set('item_list', data, timeout=CACHE_TTL)
+
+        item_list = data
+
+    # paginator = Paginator(item_list, paginate_by)
+    # page = request.GET.get('page')
+    # products = paginator.get_page(page)
+    context = {
+        'ghibli': ghibli_data,
+        'items': item_list
+    }
+
+    return render(request, template_name, context)
 
 
 class OrderSummary(LoginRequiredMixin, View):
