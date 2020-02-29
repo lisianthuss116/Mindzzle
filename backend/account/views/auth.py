@@ -25,7 +25,7 @@ from account.forms import (
     ProfileUpdateForm)
 from account.models import Profile
 from account.services.tokens import user_tokenizer
-from account.services.email import email
+from account.services.email import send_email_to
 from account.services import activation_key, generate
 
 
@@ -79,7 +79,7 @@ class RegisterView(View):
                                                     kwargs={'user_id': user_id, 'token': token})
             message = url
             # email to user-email [new-user-account]
-            email(request, user.email, message)
+            send_email_to(user.username, user.email, message)
 
             # render login page after register, and give some message that user-account is not verificated yet
             messages.warning(request, f'A confirmation email has been sent to {user.email}')
