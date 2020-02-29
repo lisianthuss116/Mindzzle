@@ -19,6 +19,8 @@ from api.serializers import AllItemSerializer
 from rest_framework.decorators import api_view
 from rest_framework import status, viewsets
 from rest_framework.parsers import JSONParser
+from django.http import JsonResponse
+import json
 
 from core.forms import CheckoutForm
 import requests
@@ -29,6 +31,34 @@ from core.models import (
     BillingAddress)
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+
+
+@cache_page(CACHE_TTL)
+def home_view(request):
+    paginate_by = 25
+    template = 'core/home-page.html'
+
+    if request.method == "GET":
+        if 'item_list' in cache:
+            item_list = cache.get('item_list')
+            item_list = json.loads(item_list)
+        else:
+            item_list = serializers.serialize('json', Item.objects.all())
+            cache.set('item_list', item_list, timeout=CACHE_TTL)
+            item_list = json.loads(item_list)
+
+        paginator = Paginator(item_list, paginate_by)
+        page = request.GET.get('page')
+        products = paginator.get_page(page)
+        context = {
+            'items': products
+        }
+
+        if type(item_list) is str or isinstance(item_list, str):
+            return JsonResponse(
+                {'failed': 'THE DATA IS NOT A LIST OR JSON. DATA:[{}]'.format(type(item_list))})
+        else:
+            return render(request, template, context)
 
 
 class Home(ListView):
@@ -51,31 +81,6 @@ class Home(ListView):
             'items': products}
 
         return render(request, self.template_name, context)
-
-def home_view(request):
-    url = 'https://ghibliapi.herokuapp.com/films/'
-    url2 = 'http://127.0.0.1:8000/api/v2/items/'
-    ghibli_data = requests.get(url=url).json()
-    paginate_by = 25
-    template_name = 'core/home-page.html'
-
-    if 'item_list' in cache:
-        item_list = cache.get('item_list')
-    else:
-        data = serializers.serialize("json", Item.objects.all())
-        cache.set('item_list', data, timeout=CACHE_TTL)
-
-        item_list = data
-
-    # paginator = Paginator(item_list, paginate_by)
-    # page = request.GET.get('page')
-    # products = paginator.get_page(page)
-    context = {
-        'ghibli': ghibli_data,
-        'items': item_list
-    }
-
-    return render(request, template_name, context)
 
 
 class OrderSummary(LoginRequiredMixin, View):
@@ -142,8 +147,7 @@ class CheckoutView(View):
                     street_address=street_address,
                     apartment_address=apartment_address,
                     country=country,
-                    billing_zip=billing_zip
-                )
+                    billing_zip=billing_zip)
                 billing_address.save()
                 ordered_product.billing_address = billing_address
                 ordered_product.save()

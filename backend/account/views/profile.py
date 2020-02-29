@@ -12,7 +12,7 @@ from account.models import Profile
 
 
 @login_required
-def profile(request):
+def profile(request, username):
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(
@@ -22,7 +22,7 @@ def profile(request):
             u_form.save()
             p_form.save()
             messages.success(request, f'Your Account Has Been Updated!')
-            return redirect('profile')
+            return redirect('profile', username=username)
 
     else:
         u_form = UserUpdateForm(instance=request.user)
