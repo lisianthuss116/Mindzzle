@@ -20,8 +20,8 @@ urlpatterns = [
     path('', include('core.urls', namespace='core')),
     # auth
     path('auth/', include(auth_url, namespace='auth')),
-    # accounts
-    path('profile/', include(profile_url, namespace='profile')),
+    # account
+    path('account/', include(profile_url, namespace='account')),
     # logout
     path('logout/', auth_view.LogoutView.as_view(
         template_name='auth/logout.html'), name='logout'),
