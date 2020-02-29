@@ -21,7 +21,8 @@ app_name = 'core'
 
 urlpatterns = [
     # home
-    path('', Home.as_view(), name='home'),
+    # path('', Home.as_view(), name='home'),
+    path('', home_view, name='home'),
     # checkout
     path('checkout/', CheckoutView.as_view(), name='checkout'),
     # user cart
