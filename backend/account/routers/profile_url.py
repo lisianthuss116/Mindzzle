@@ -9,11 +9,11 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_view
 from django.urls import path, include
 
-from account.views import profile as profile_view
+from account.views.profile import profile
 import re
 
-app_name = 'profile'
+app_name = 'account'
 
 urlpatterns = [
-    path('profile/', profile_view.profile, name='profile'),
+    path('<str:username>/', profile, name='profile'),
 ]
