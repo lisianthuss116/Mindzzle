@@ -1,27 +1,49 @@
 {% extends 'profile_page/layout.html' %}
+{% load crispy_forms_tags %}
 
 {% block profile_content %}
 <div class="col-12 mt-5">
-    <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+    <ul class="nav nav-tabs mb-4" role="tab">
         <li class="nav-item">
-            <a class="nav-link active" id="history-tab" data-toggle="tab" href="#history" role="tab" aria-controls="history" aria-selected="true">
+            <a class="nav-link active" id="nav-list" data-toggle="tab" href="#history" role="tab" aria-controls="history" aria-selected="true">
                 Checkout History</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="basicInfo-tab" data-toggle="tab" role="tab" href="#basicInfo" aria-controls="basicInfo"aria-selected="false">Basic Info</a>
+            <a class="nav-link" id="nav-list" data-toggle="tab" role="tab" href="#basicInfo" aria-controls="basicInfo" aria-selected="false">
+                Basic Info</a>
         </li>
     </ul>
     <hr>
 </div>
 <div class="row mt-4 mb-5">
-    <div class="tab-panel fade show active" id="history" role="tabpanel" aria-labelledby="history-tab">
-        <div style="margin-left:30px !important;">
-            <div class="card border-radius-015">
-                <div class="card-body">
-                  <h6 class="card-title">Card title</h6>
-                  <span class="card-subtitle mb-2 text-muted small">
-                      Card subtitle</span>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <div class="col-12">
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="history" role="tabpanel" aria-labelledby="nav-list">
+                <div style="margin-left:30px !important;">
+                    <div class="card border-radius-015">
+                        <div class="card-body">
+                          <h6 class="card-title">Card title</h6>
+                          <span class="card-subtitle mb-2 text-muted small">
+                              Card subtitle</span>
+                          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="basicInfo" role="tabpanel" aria-labelledby="nav-list">
+                <div style="margin-left:30px !important;">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <fieldset class="form-group">
+                            {{ u_form|crispy }}
+                            <br>
+                            {{ p_form|crispy }}
+                        </fieldset>
+                        <div class="form-group">
+                            <button class="btn bg-dark-grey text-white" type="submit">Save change</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
