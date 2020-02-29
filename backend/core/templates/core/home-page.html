@@ -7,7 +7,9 @@
         <div class="card border-radius-015 mt-3 mr-4" style="width:16rem;">
             <div class="card-body">
                 <p class="card-text">
-                    <a href="{% url 'core:product' slug=x.slug %}">{{ x.title }}</a>
+                    <a class="a-no-decoration" href="{% url 'core:product' slug=x.fields.slug %}">
+                        {{ x.fields.title }}
+                    </a>
                 </p>
             </div>
         </div>
