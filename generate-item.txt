@@ -1,0 +1,25 @@
+#=================================================#
+# step 1 = run : python manage.py shell
+# step 2 = copy this code below
+
+from core.models import *
+import random, time
+
+x = 1
+price = 10000
+discount_pr = [0,0]
+title3 = ["Hawaiian Shirt", "Sleeveless Shirt", "Sneakers Shoes", "Digital Watches"]
+desc = ["The Aloha shirt, also referred to as a Hawaiian shirt, is a style of dress shirt originating in Hawaii. They are collared and buttoned dress shirts, usually short-sleeved and cut from printed fabric. They are often worn untucked, but can be worn tucked in as well. They are not only casual, informal wear, but serve as formal business attire in Hawaii.", "A sleeveless shirt is a shirt manufactured without sleeves, or whose sleeves have been cut off. Sleeveless shirts are worn by people of either gender, depending on the style. They are used as undershirts, or worn by athletes in sports such as track and field and triathlon.", "Sneakers are shoes primarily designed for sports or other forms of physical exercise, but which are now also widely used for everyday wear.", "A watch is a timepiece intended to be carried or worn by a person. It is designed to keep working despite the motions caused by the person's activities. A wristwatch is designed to be worn around the wrist, attached by a watch strap or other type of bracelet."]
+
+while x <= 1000:
+     title2 = random.choice(title3)
+     get_dis_pr = price - 1000
+     discount_pr.append(get_dis_pr)
+     set_dis = float(random.choice(discount_pr))
+     qty = random.randint(1, 5000)
+     rand_desc = random.choice(desc)
+     Item.objects.create(title=title2, price=price, quantity=qty, description_item=rand_desc, discount_price=set_dis, category="S", label="S")
+     del discount_pr[-1]
+     price += 10000
+     x += 1
+     time.sleep(1)

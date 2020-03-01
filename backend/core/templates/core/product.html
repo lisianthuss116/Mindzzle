@@ -24,7 +24,9 @@
                         </div>
                         <div class="col-lg-5 col-sm-12">
                             <p class="small">{{ object.get_category_display }}</p>
-                            {% if object.discount_price %}
+                            {% if object.discount_price == 0 or object.discount_price == "0" %}
+                            <p>${{ object.price }}</p>
+                                {% else %}
                                 <p>
                                     <strong>
                                         <del class="text-danger">${{ object.price }}</del>
@@ -32,8 +34,6 @@
                                     </strong>
                                     <span>${{ object.discount_price }}</span>
                                 </p>
-                                {% else %}
-                                <p>${{ object.price }}</p>
                             {% endif %}
                             <strong>Description</strong>
                             <p>{{ object.description_item }}</p>
