@@ -7,6 +7,8 @@ from django.shortcuts import reverse
 from django_countries.fields import CountryField
 
 from unidecode import unidecode
+import hashlib
+import random
 
 CATEGORY_CHOICES = (
     ('S', 'Shirt'),
@@ -38,7 +40,13 @@ class Item(models.Model):
     def save(self, *args, **kwargs):
         if not self.id:
             # Newly created object, so set slug
-            self.slug = slugify(unidecode(self.title))
+            salt = hashlib.sha256(
+                str(random.random()).encode('utf-8')).hexdigest()[:16]
+            last = hashlib.sha256(salt.encode('utf-8')).hexdigest()[:16]
+
+            # generate new item-with-unique
+            item_title = str(self.title) + ' ' + str(last)
+            self.slug = slugify(unidecode(item_title))
         super(Item, self).save(*args, **kwargs)
 
     def get_add_to_cart_url(self):
@@ -91,8 +99,8 @@ class Order(models.Model):
     ordered = models.BooleanField(default=False)
     billing_Address = models.ForeignKey(
         'BillingAddress',
-        on_delete=models.SET_NULL,blank=True, null=True
-        )
+        on_delete=models.SET_NULL, blank=True, null=True
+    )
 
     def __str__(self):
         return f'{self.username_order.username} Order'
@@ -103,9 +111,10 @@ class Order(models.Model):
             total += order_item.get_final_price()
         return total
 
+
 class BillingAddress(models.Model):
     username_order = models.ForeignKey(settings.AUTH_USER_MODEL,
-                                          on_delete=models.CASCADE)
+                                       on_delete=models.CASCADE)
     street_address = models.CharField(max_length=100)
     apartment_address = models.CharField(max_length=100)
     country = CountryField(multiple=False)
