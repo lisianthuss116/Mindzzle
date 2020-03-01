@@ -17,7 +17,7 @@ def send_email_to(reciver_username, receiver_email, link):
     <!DOCTYPE html>
     <html>
     <body style='font-size: 1rem;'>
-        <p style='margin-top: 1rem !important;margin-bottom: 1rem !important;'>Almost done, <span style="font-weight: 700;">{reciver_username}</span>! To complete you django-ecommerce sign up, we just need to verify you email address.</p>
+        <p style='margin-top: 1rem !important;margin-bottom: 1rem !important;'>Almost done, <span style="font-weight: 700;">{reciver_username}</span>! To complete your django-ecommerce sign up, we just need to verify your email address.</p>
 
         <p style='margin-top: 1rem !important;margin-bottom: 1rem !important;'>Once verified, you can start using all of django-ecommerce features to use. This link will be able in 24 hours. If you did not attempt to sign up, you can delete or permit the message.</p>
 
