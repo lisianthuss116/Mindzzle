@@ -6,11 +6,20 @@
         {% for x in items %}
         <div class="card border-radius-015 mt-3 mr-4" style="width:16rem;">
             <div class="card-body">
-                <p class="card-text">
-                    <a class="a-no-decoration" href="{% url 'core:product' slug=x.fields.slug %}">
+                <div class="card-text">
+                    <a class="a-no-decoration" href="{% url 'core:product' slug=x.fields.slug %}" style="font-size: 1.2rem !important;">
                         {{ x.fields.title }}
-                    </a>
-                </p>
+                    </a><br>
+                    {% if x.fields.discount_price %}
+                    <strong>
+                        <del class="text-danger">${{ x.fields.price }}</del>
+                    &nbsp;&nbsp;
+                    </strong>
+                    <span>${{ x.fields.discount_price }}</span>
+                        {% else %}
+                        <p>${{ x.fields.price }}</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
         {% endfor %}
