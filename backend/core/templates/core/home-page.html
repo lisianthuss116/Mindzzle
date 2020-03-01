@@ -10,14 +10,14 @@
                     <a class="a-no-decoration" href="{% url 'core:product' slug=x.fields.slug %}" style="font-size: 1.2rem !important;">
                         {{ x.fields.title }}
                     </a><br>
-                    {% if x.fields.discount_price %}
-                    <strong>
-                        <del class="text-danger">${{ x.fields.price }}</del>
-                    &nbsp;&nbsp;
-                    </strong>
-                    <span>${{ x.fields.discount_price }}</span>
+                    {% if x.fields.discount_price == 0 or x.fields.discount_price == "0" %}
+                    <p>${{ x.fields.price }}</p>
                         {% else %}
-                        <p>${{ x.fields.price }}</p>
+                        <strong>
+                            <del class="text-danger">${{ x.fields.price }}</del>
+                        &nbsp;&nbsp;
+                        </strong>
+                        <span>${{ x.fields.discount_price }}</span>
                     {% endif %}
                 </div>
             </div>
