@@ -44,6 +44,8 @@ class RegisterView(View):
 
         :param request:
         """
+        if request.user.is_authenticated:
+            return redirect('/')
         # render register page [if user is not give any post request]
         return render(request, 'auth/register.html',
                       {'form': UserRegistrationForm()})
@@ -54,6 +56,8 @@ class RegisterView(View):
 
         :param request:
         """
+        if request.user.is_authenticated:
+            return redirect('/')
         # get requested post form
         form = UserRegistrationForm(request.POST or None)
         # validate form
@@ -98,6 +102,8 @@ class ConfirmRegisterView(View):
         :param user_id:
         :param token:
         """
+        if request.user.is_authenticated:
+            return redirect('/')
         # get user id
         user_id = generate.get_real_user_id(user_id)
         # check if user has been registered and not activated
@@ -138,6 +144,8 @@ def login(request):
     :method POST:
     :return render register page
     """
+    if request.user.is_authenticated:
+        return redirect('/')
     # check request method
     if request.method == "POST":
         form = UserLoginForm(request.POST or None)
@@ -161,7 +169,7 @@ def login(request):
                 # Redirect to login-page
                 return redirect('/')
 
-        messages.error(request, 'Your account is not activated yet, please activate your account. check you email inbox, or your spam email !')
+        messages.error(request, 'Your account is not activated yet, please activate your account. check your email inbox, or your spam email !')
         return redirect('auth:login')
     # no requested data
     else:
