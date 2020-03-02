@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 
 from rest_framework.authtoken.models import Token
+from defender import signals
 
 from account.models import Profile
 import time
@@ -39,3 +40,7 @@ def save_profile(sender, instance, **kwargs):
 @receiver(post_save, sender=User)
 def create_auth_token(sender, instance, **kwargs):
     Token.objects.get_or_create(user=instance)
+
+@receiver(signals.username_block)
+def username_blocked(username, **kwargs):
+    print("%s was blocked!" % username)

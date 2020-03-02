@@ -16,6 +16,7 @@ profile_url = 'account.routers.profile_url'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url('admin/defender/', include('defender.urls')),
     # core
     path('', include('core.urls', namespace='core')),
     # auth

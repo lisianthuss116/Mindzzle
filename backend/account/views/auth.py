@@ -158,11 +158,9 @@ def login(request):
             # validate form
             if form.is_valid():
                 # if data does valid, get fields
-                email = form.cleaned_data.get('email')
                 username = form.cleaned_data.get('username')
                 password = form.cleaned_data.get('password')
-                user = authenticate(
-                    email=email, username=username, password=password)
+                user = authenticate(                                                                                                                                        username=username, password=password)
                 login_auth(request, user)
                 # message [success]
                 messages.success(request, 'Success login')
@@ -171,8 +169,10 @@ def login(request):
 
         messages.error(request, 'Your account is not activated yet, please activate your account. check your email inbox, or your spam email !')
         return redirect('auth:login')
+    
     # no requested data
     else:
+        
         form = UserLoginForm()
 
     context = {
