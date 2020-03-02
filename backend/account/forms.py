@@ -1,7 +1,9 @@
-from django import forms
+odfrom django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from disposable_email_checker import DisposableEmailChecker
+from django.utils.translation import ugettext_lazy as _
 
 from account.models import Profile
 import datetime
@@ -30,6 +32,12 @@ class UserRegistrationForm(UserCreationForm):
             'placeholder': 'e.g : John Doe',
             'autofocus':'off'
         }))
+
+    def clean_email(self):
+            email_checker = DisposableEmailChecker()
+            if email_checker.is_disposable(email=self.cleaned_data['email']):
+                raise forms.ValidationError(_('Please use a different email address provider.'))
+            return self.cleaned_data['email']
 
     class Meta:
         model = User
