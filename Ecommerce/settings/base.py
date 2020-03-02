@@ -106,7 +106,7 @@ EMAIL_HOST = env('EMAIL_HOST')
 EMAIL_PORT = env('EMAIL_PORT')
 EMAIL_HOST_USER = 'djangocoFresh@gmail.com'
 EMAIL_HOST_PASSWORD = 'xdzpztwngkgugjvc'
-
+DISPOSABLE_EMAIL_DOMAINS='disposable_email_domains.txt'
 # Message tags
 MESSAGE_TAGS = {message_constants.DEBUG: 'debug',
                 message_constants.INFO: 'info',
@@ -114,7 +114,7 @@ MESSAGE_TAGS = {message_constants.DEBUG: 'debug',
                 message_constants.WARNING: 'warning',
                 message_constants.ERROR: 'danger',}
 
-DISPOSABLE_EMAIL_DOMAINS='disposable_email_domains.txt'
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
