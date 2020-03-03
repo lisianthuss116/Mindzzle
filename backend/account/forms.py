@@ -1,10 +1,10 @@
-odfrom django import forms
+from django import forms
 from django.contrib.auth import authenticate
+
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from disposable_email_checker import DisposableEmailChecker
 from django.utils.translation import ugettext_lazy as _
-
 from account.models import Profile
 import datetime
 
@@ -56,33 +56,18 @@ class UserRegistrationForm(UserCreationForm):
 
 
 class UserLoginForm(forms.Form):
-    email = forms.EmailField(
-        help_text='Must be a valid email. And consider to using @gmail, or etc.')
     username = forms.CharField(help_text='Must be a valid username')
     password = forms.CharField(widget=forms.PasswordInput)
 
-    def clean(self, *args, **kwargs):
-        email = self.cleaned_data.get('email')
-        username = self.cleaned_data.get('username')
-        password = self.cleaned_data.get('password')
-
-        if True:
-            user = authenticate(
-                email=email, username=username, password=password)
-            if user:
-                if not user:
-                    raise forms.ValidationError("This user does not exists !")
-            return super(UserLoginForm, self).clean(*args, **kwargs)
-
-        return False
-
+    
+    
 
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email']
+        fields = ['username', 'first_name', 'last_name', 'email', ]
         attrs = {'readonly': True}
 
 

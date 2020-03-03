@@ -28,7 +28,7 @@ from account.services.tokens import user_tokenizer
 from account.services.email import send_email_to
 from account.services import activation_key, generate
 
-
+from ratelimit.decorators import ratelimit
 class RegisterView(View):
     """
     user register new account
@@ -86,7 +86,8 @@ class RegisterView(View):
             send_email_to(user.username, user.email, message)
 
             # render login page after register, and give some message that user-account is not verificated yet
-            messages.warning(request, f'A confirmation email has been sent to {user.email}')
+            messages.warning(
+                request, f'A confirmation email has been sent to {user.email}')
             return redirect('auth:login')
         # register-form is not valid, return to register page
         return render(request, 'auth/register.html',
@@ -134,8 +135,7 @@ class ConfirmRegisterView(View):
             # render activation page
             return render(request, 'account/activation.html', context)
 
-
-@require_http_methods(['GET', 'POST'])
+@ratelimit(key='post:username', rate='3/5m', method=['GET', 'POST'], block=True)
 def login(request):
     """
     user login
@@ -153,30 +153,37 @@ def login(request):
         username = request.POST.get("username")
         user = User.objects.get(username=username)
         activated = Profile.objects.get(user_account_name=user.id)
+        
 
         if activated.activation_key and activated.is_valid == True:
             # validate form
             if form.is_valid():
                 # if data does valid, get fields
-                email = form.cleaned_data.get('email')
                 username = form.cleaned_data.get('username')
                 password = form.cleaned_data.get('password')
-                user = authenticate(
-                    email=email, username=username, password=password)
-                login_auth(request, user)
-                # message [success]
-                messages.success(request, 'Success login')
-                # Redirect to login-page
-                return redirect('/')
+                user = authenticate(request=request, username=username, password=password)
 
-        messages.error(request, 'Your account is not activated yet, please activate your account. check your email inbox, or your spam email !')
+                if user and user is not None:
+                    login_auth(request, user)
+                    # Redirect to login-page
+                    return redirect('/')
+
+            messages.error(request, 'Wrong Username or Password, You just have 3 chance for login!!')
+            return redirect('auth:login')
+        else:
+            messages.error(request, 'Your account is not activated yet, please activate your account. check your email inbox, or your spam email !')         
         return redirect('auth:login')
+
     # no requested data
     else:
         form = UserLoginForm()
 
     context = {
-        'form': form
+        'form': form,
     }
-
+    was_limited = getattr(request, 'limited', False)
     return render(request, 'auth/login.html', context)
+
+def ratelimited_error(request, exception): # Return To html
+    return render(request, 'auth/blocked.html', status=429)
+    

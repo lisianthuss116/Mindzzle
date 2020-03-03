@@ -14,6 +14,18 @@
     {% include 'lib/navbar.html' %}
 
     {% block content %}
+    <div class="col-12">
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
     {% endblock content %}
 
     <script src="{% static 'vendor/js/jquery-3.4.1.slim.min.js' %}"></script>

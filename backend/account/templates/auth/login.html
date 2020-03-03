@@ -29,6 +29,11 @@
                             <legend class="border-radius-015 mb-4 font-weight-bold">
                                 Login
                             </legend>
+                            
+                            {% if cooloff_time_seconds %}
+                                Please wait for {{cooloff_time_seconds}} minute
+                            {% endif %}
+                                
                             {{ form|crispy }}
                         </fieldset>
 
