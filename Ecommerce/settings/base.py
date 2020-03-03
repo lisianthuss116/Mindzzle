@@ -47,6 +47,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'defender.middleware.FailedLoginMiddleware',
+    'ratelimit.middleware.RatelimitMiddleware',
+
 ]
 
 ROOT_URLCONF = 'Ecommerce.urls'
@@ -101,6 +103,18 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
+# Django Ratelimit
+RATELIMIT_ENABLE = True
+RATELIMIT_USE_CACHE = 'default'
+RATELIMIT_VIEW = 'account.views.auth.ratelimited_error'
+
+# Django Defender
+DEFENDER_LOGIN_FAILURE_LIMIT = 1
+DEFENDER_COOLOFF_TIME_MINUTES = 5
+DEFENDER_LOCKOUT_TEMPLATE = 'auth/blocked.html'
+DEFENDER_DISABLE_IP_LOCKOUT = False
+DEFENDER_REDIS_URL = 'redis://127.0.0.1:6379/1'
+
 # Email
 EMAIL_BACKEND = env('EMAIL_BACKEND')
 EMAIL_USE_TLS = env('EMAIL_USE_TLS')
@@ -127,9 +141,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = 'auth/login'
-
-DEFENDER_LOGIN_FAILURE_LIMIT = 3
-DEFENDER_COOLOFF_TIME = 300
-DEFENDER_DISABLE_IP_LOCKOUT = True
-DEFENDER_LOCKOUT_URL = './auth/login'
+LOGIN_URL = 'auth:login'

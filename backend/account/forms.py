@@ -59,10 +59,8 @@ class UserLoginForm(forms.Form):
     username = forms.CharField(help_text='Must be a valid username')
     password = forms.CharField(widget=forms.PasswordInput)
 
-    def clean(self, *args, **kwargs):
-        username = self.cleaned_data.get('username')
-        password = self.cleaned_data.get('password')
-
+    
+    
 
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()

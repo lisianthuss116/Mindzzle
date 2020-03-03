@@ -44,3 +44,8 @@ def create_auth_token(sender, instance, **kwargs):
 @receiver(signals.username_block)
 def username_blocked(username, **kwargs):
     print("%s was blocked!" % username)
+
+@receiver(signals.ip_block)
+def ip_blocked(ip_address, **kwargs):
+    print("%s was blocked!" % ip_address)
+
