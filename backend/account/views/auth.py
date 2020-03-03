@@ -172,7 +172,6 @@ def login(request):
             return redirect('auth:login')
         else:
             messages.error(request, 'Your account is not activated yet, please activate your account. check your email inbox, or your spam email !')         
-        
         return redirect('auth:login')
 
     # no requested data
