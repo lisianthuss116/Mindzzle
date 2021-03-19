@@ -15,7 +15,7 @@ django-email==0.1.10
 django-environ==0.4.5
 django-ipware==2.1.0
 django-redis==4.11.0
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 environ==1.0
 httpie==2.0.0
 idna==2.9
