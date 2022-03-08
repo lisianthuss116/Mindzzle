@@ -17,7 +17,7 @@ django-ipware==2.1.0
 django-redis==4.11.0
 djangorestframework==3.11.0
 environ==1.0
-httpie==2.0.0
+httpie==3.1.0
 idna==2.9
 loadtest==0.0.2
 pep8==1.7.1
